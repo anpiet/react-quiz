@@ -2,27 +2,32 @@ import { useEffect } from 'react';
 
 type TimerProps = {
   secondsRemaining: number;
+  timerStopped: boolean;
   dispatch: React.Dispatch<{
     type: string;
     payload: any;
   }>;
 };
 
-export const Timer = ({ dispatch, secondsRemaining }: TimerProps) => {
-  const minutes = Math.floor(secondsRemaining / 60);
-  const seconds = secondsRemaining - minutes * 60;
+export const Timer = ({
+  dispatch,
+  secondsRemaining,
+  timerStopped,
+}: TimerProps) => {
   useEffect(() => {
-    const timer = setInterval(() => {
-      dispatch({ type: 'tick', payload: null });
-    }, 1000);
+    let timer: NodeJS.Timeout;
+    if (!timerStopped) {
+      timer = setInterval(() => {
+        dispatch({ type: 'tick', payload: null });
+      }, 1000);
+    }
 
     return () => clearInterval(timer);
-  }, [dispatch]);
+  }, [dispatch, timerStopped]);
   return (
     <div className='timer'>
-      {minutes < 10 && '0'}
-      {minutes} : {seconds < 10 && '0'}
-      {seconds}
+      {secondsRemaining < 10 && '0'}
+      {secondsRemaining}
     </div>
   );
 };

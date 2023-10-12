@@ -19,7 +19,8 @@ const initialState: InitialState = {
   index: 0,
   answer: null,
   points: 0,
-  secondsRemaining: 150,
+  secondsRemaining: 10,
+  timerStopped: false,
 };
 
 const reducer = (state: any, action: { type: string; payload: any }) => {
@@ -50,6 +51,7 @@ const reducer = (state: any, action: { type: string; payload: any }) => {
       return {
         ...state,
         answer: action.payload,
+        timerStopped: true,
         points:
           action.payload === question.data.correctOption
             ? state.points + +question.data.points
@@ -60,6 +62,8 @@ const reducer = (state: any, action: { type: string; payload: any }) => {
         ...state,
         index: state.index++,
         answer: null,
+        timerStopped: false,
+        secondsRemaining: initialState.secondsRemaining,
       };
     case 'restart':
       return {
@@ -83,7 +87,15 @@ const reducer = (state: any, action: { type: string; payload: any }) => {
 
 export const App = () => {
   const [
-    { questions, status, index, answer, points, secondsRemaining },
+    {
+      questions,
+      status,
+      index,
+      answer,
+      points,
+      secondsRemaining,
+      timerStopped,
+    },
     dispatch,
   ] = useReducer(reducer, initialState);
   const supabase = createClient(
@@ -135,7 +147,11 @@ export const App = () => {
               answer={answer}
             />
             <footer>
-              <Timer dispatch={dispatch} secondsRemaining={secondsRemaining} />
+              <Timer
+                dispatch={dispatch}
+                secondsRemaining={secondsRemaining}
+                timerStopped={timerStopped}
+              />
               <NextButton
                 dispatch={dispatch}
                 answer={answer}

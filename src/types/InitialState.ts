@@ -7,4 +7,5 @@ export type InitialState = {
   answer: number | null;
   points: number;
   secondsRemaining: number;
+  timerStopped: boolean;
 };
