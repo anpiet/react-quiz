@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useReducer } from 'react';
 import { Header } from './components/Header';
 import { Main } from './Main';
@@ -60,7 +61,7 @@ const reducer = (state: any, action: { type: string; payload: any }) => {
     case 'nextQuestion':
       return {
         ...state,
-        index: state.index++,
+        index: state.index + 1,
         answer: null,
         timerStopped: false,
         secondsRemaining: initialState.secondsRemaining,
